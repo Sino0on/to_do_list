@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}All list{% endblock %}
+{% block content %}
+{% for i in delas %}
+  <div class="album py-5 bg-light">
+    <div class="container">
+<!--      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">-->
+        <div class="col ">
+            <div class="pd-5">
+                <div class=" row-cols-md-2">
+          <div class="card shadow-sm ">
+            <div class="card-body">
+              <h1 class="card-text">{{ i.title }}</h1>
+              <p class="card-text pt-3">{{ i.content }}</p>
+              <p class="card-text">Сделать до: {{ i.srok }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a href="{% url 'delety' i.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                  <a href="{% url 'edit_do' i.pk %}" class="btn btn-sm btn-outline-warning">Edit</a>
+                </div>
+
+                <small class="text-muted">{{i.created}}  Created by {{ i.author }}</small><br>
+
+              </div>
+            </div>
+          </div>
+                </div>
+        </div>
+<!--      </div>-->
+            </div>
+    </div>
+  </div>
+
+{% endfor %}
+
+{% endblock %}
