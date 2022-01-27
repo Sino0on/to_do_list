@@ -15,13 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from todo.views import delety, EditTodoView, index, create
+from todo.views import *
+from django.contrib.auth import views as auth_view
 
 
 urlpatterns = [
     path('delete/<int:id>', delety, name='delety'),
-    path('edit/<int:pk>', EditTodoView.as_view(), name='edit_do'),
+    path('edit/<int:pk>', do_edit, name='edit_do'),
     path('admin/', admin.site.urls),
     path('', index, name='home1'),
     path('create_do', create, name='create_do'),
+    path('author/<int:user_id>', author, name='author'),
+    path('register/', register, name='register'),
+    path('logout/', auth_view.LogoutView.as_view(template_name='logout.html'), name='logout'),
+    path('login/', auth_view.LoginView.as_view(template_name='login.html'), name='login'),
+    path('all_news', all_news, name='all_news')
 ]

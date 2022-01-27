@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="col-ms-auto">
+    <h1>Registration Page!</h1>
+  <form method="post" action="{% url 'register' %}">
+      {% csrf_token %}
+      {% if form.errors %}
+      <p>Error</p>
+      {% endif %}
+
+      {{ form.as_p }}
+      <input type="submit" value="Register">
+  </form>
+</div>
+{% endblock %}

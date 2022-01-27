@@ -1,5 +1,7 @@
 from django import forms
-from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import UpdateView
 
 from .models import *
@@ -10,11 +12,25 @@ from django.http import HttpResponse
 
 # Create your views here.
 
+def do_edit(request, pk):
+    do = get_object_or_404(Todo, pk=pk)
+    if request.method == "POST":
+        form = TodosForm(request.POST, instance=do)
+        if form.is_valid():
+            do = form.save(commit=False)
+            do.author = request.user
+            # return HttpResponse(do)
+            do.save()
+            return redirect('/', pk=do.pk)
+    else:
+        form = TodosForm(instance=do)
+    return render(request, 'edit_do.html', {'form': form})
+
 # @login_required()
-class EditTodoView(UpdateView):
-    model = Todo
-    template_name = 'edit_do.html'
-    fields = ['title', 'content', 'srok']
+# class EditTodoView(UpdateView):
+#     model = Todo
+#     template_name = 'edit_do.html'
+#     fields = ['title', 'content', 'srok']
     # widgets = {
     #     # 'author': forms.TextInput(attrs={'class': 'form-control'}),
     #     'title': forms.TextInput(
@@ -44,8 +60,37 @@ class EditTodoView(UpdateView):
 
 
 def index(request):
-    delas = Todo.objects.all()
+    delas = Todo.objects.filter(author=request.user.pk)
     return render(request, 'index.html', {'delas': delas})
+
+
+def all_news(request):
+    delas = Todo.objects.all()
+    return render(request, 'all_does.html', {'delas': delas})
+
+
+def author(request, user_id):
+    delas = Todo.objects.filter(author=user_id)
+    author_name = User.objects.get(pk=user_id)
+    return render(request, 'author.html', {'delas': delas, 'author_name': author_name})
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return redirect('/')
+    else:
+        form = UserCreationForm()
+
+    context = {'form': form}
+    return render(request, 'register.html', context)
 
 
 @login_required()
