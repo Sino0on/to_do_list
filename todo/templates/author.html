@@ -7,8 +7,14 @@
     <div class="container mb-4">
     	<img src="" class="mt-neg100 mb-4 rounded-circle" width="128">
     	<h1 class="font-weight-bold title">{{ author_name }}</h1>
+        {% if author_name == user %}
+            {% if delas %}
+                <a href="{% url 'delete_all' %}" class="btn btn-danger">Delete All</a>
+            {% endif %}
+        {% endif %}
 
     </div>
+{% if delas %}
 {% for i in delas %}
       <div class="album py-5 bg-light">
         <div class="container">
@@ -41,4 +47,7 @@
       </div>
     </main>
 {% endfor %}
+{% else %}
+<h1 class="container">Дел пока нет</h1>
+{% endif %}
 {% endblock %}

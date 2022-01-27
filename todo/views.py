@@ -69,6 +69,12 @@ def all_news(request):
     return render(request, 'all_does.html', {'delas': delas})
 
 
+def delete_all(request):
+    all_delas = Todo.objects.filter(author=request.user.pk)
+    all_delas.delete()
+    return redirect('.')
+
+
 def author(request, user_id):
     delas = Todo.objects.filter(author=user_id)
     author_name = User.objects.get(pk=user_id)

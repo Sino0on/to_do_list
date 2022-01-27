@@ -29,5 +29,6 @@ urlpatterns = [
     path('register/', register, name='register'),
     path('logout/', auth_view.LogoutView.as_view(template_name='logout.html'), name='logout'),
     path('login/', auth_view.LoginView.as_view(template_name='login.html'), name='login'),
-    path('all_news', all_news, name='all_news')
+    path('all_news', all_news, name='all_news'),
+    path('delete_all', delete_all, name='delete_all'),
 ]
